@@ -37,9 +37,19 @@ return [
       ],
     ],
   ],
+  'service_manager' => [
+    'factories' => [
+      Service\GreetingService::class => InvokableFactory::class,
+    ],
+  ],
   'controllers' => [
     'factories' => [
       Controller\IndexController::class => InvokableFactory::class,
+      Controller\IndexController::class => function($container) {
+        return new Controller\IndexController(
+          $container->get(Service\GreetingService::class)
+        );
+      },
     ],
   ],
   'view_manager' => [
