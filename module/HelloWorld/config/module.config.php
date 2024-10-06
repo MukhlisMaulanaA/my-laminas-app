@@ -6,6 +6,7 @@ namespace HelloWorld;
 
 
 use Laminas\Router\Http\Literal;
+use Laminas\Router\Http\Segment;
 use Laminas\ServiceManager\Factory\InvokableFactory;
 
 return [
@@ -18,6 +19,19 @@ return [
           'defaults' => [
             'controller' => Controller\IndexController::class,
             'action' => 'index',
+          ],
+        ],
+      ],
+      'hello-user' => [
+        'type' => Segment::class,
+        'options' => [
+          'route' => '/hello/:name',
+          'constraints' => [
+            'name' => '[a-zA-Z][a-zA-Z0-9_-]*',
+          ],
+          'defaults' => [
+            'controller' => Controller\IndexController::class,
+            'action' => 'greet',
           ],
         ],
       ],

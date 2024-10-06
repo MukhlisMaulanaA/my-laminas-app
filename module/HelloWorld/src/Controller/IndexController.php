@@ -13,4 +13,10 @@ class IndexController extends AbstractActionController
   {
     return new ViewModel();
   }
+
+  public function greetAction()
+  {
+    $name = $this->params()->fromRoute('name', 'Guest');
+    return new ViewModel(['name' => $name]);
+  }
 }
