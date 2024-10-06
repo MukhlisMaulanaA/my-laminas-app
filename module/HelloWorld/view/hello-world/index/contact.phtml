@@ -1,0 +1,11 @@
+<h1>Contact Us</h1>
+
+<?php if (isset($this->message)): ?>
+    <p><?= $this->message; ?></p>
+<?php endif; ?>
+
+<?= $this->form()->openTag($form); ?>
+<?= $this->formRow($form->get('name')); ?>
+<?= $this->formRow($form->get('email')); ?>
+<?= $this->formSubmit($form->get('submit')); ?>
+<?= $this->form()->closeTag(); ?>

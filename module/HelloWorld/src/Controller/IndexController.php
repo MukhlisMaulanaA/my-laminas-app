@@ -8,6 +8,8 @@ use HelloWorld\Service\GreetingService;
 use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\ViewModel;
 
+use HelloWorld\Form\ContactForm;
+
 class IndexController extends AbstractActionController
 {
   private $greetingService;
@@ -32,5 +34,25 @@ class IndexController extends AbstractActionController
     $name = $this->params()->fromRoute('name', 'Guest');
     $greeting = $this->greetingService->getGreeting($name);
     return new ViewModel(['greeting' => $greeting]);
+  }
+
+  // Step 3 : Form Handling
+  public function contactAction()
+  {
+    $form = new ContactForm();
+    $request = $this->getRequest();
+
+    if ($request->isPost()) {
+      $form->setData($request->getPost());
+
+      if ($form->isValid()) {
+        // proses data yang valid
+        $data = $form->getData();
+        return new ViewModel(['form' => $form, 'message' => 'Form berhasil disubmit!']);
+
+      }
+    }
+
+    return new ViewModel(['form' => $form]);
   }
 }
