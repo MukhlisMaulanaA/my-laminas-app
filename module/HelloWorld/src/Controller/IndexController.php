@@ -46,10 +46,11 @@ class IndexController extends AbstractActionController
       $form->setData($request->getPost());
 
       if ($form->isValid()) {
-        // proses data yang valid
         $data = $form->getData();
-        return new ViewModel(['form' => $form, 'message' => 'Form berhasil disubmit!']);
-
+        return new ViewModel([
+          'form' => $form,
+          'message' => 'Form berhasil dikirim!',
+        ]);
       }
     }
 

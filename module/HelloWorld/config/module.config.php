@@ -35,6 +35,16 @@ return [
           ],
         ],
       ],
+      'contact' => [
+        'type' => Literal::class,
+        'options' => [
+          'route' => '/contact',
+          'defaults' => [
+            'controller' => Controller\IndexController::class,
+            'action' => 'contact',
+          ],
+        ],
+      ],
     ],
   ],
   'service_manager' => [
