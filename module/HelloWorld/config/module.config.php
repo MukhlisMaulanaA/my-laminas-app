@@ -5,12 +5,11 @@ declare(strict_types=1);
 namespace HelloWorld;
 
 
-use HelloWorld\Model\UserTable;
 use Laminas\Router\Http\Literal;
 use Laminas\Router\Http\Segment;
 use Laminas\Db\ResultSet\ResultSet;
-use HelloWorld\Service\GreetingService;
 use Laminas\Db\TableGateway\TableGateway;
+use Laminas\Authentication\AuthenticationService;
 use Laminas\ServiceManager\Factory\InvokableFactory;
 
 return [
@@ -120,6 +119,7 @@ return [
           ],
         ],
       ],
+
     ],
   ],
   'service_manager' => [
@@ -137,6 +137,10 @@ return [
         $resultSetPrototype->setArrayObjectPrototype(new Model\User());
         return new TableGateway('users', $dbAdapter, null, $resultSetPrototype);
       },
+      AuthenticationService::class => function ($container) {
+        $authService = new AuthenticationService();
+        return $authService;
+      },
     ],
   ],
 
@@ -144,8 +148,9 @@ return [
     'factories' => [
       Controller\IndexController::class => function ($container) {
         return new Controller\IndexController(
-          $container->get(GreetingService::class),
-          $container->get(UserTable::class)
+          $container->get(Service\GreetingService::class),  // Argument 1: GreetingService
+          $container->get(Model\UserTable::class),          // Argument 2: UserTable
+          $container->get('Laminas\Db\Adapter\Adapter')     // Argument 3: DbAdapter
         );
       },
     ],

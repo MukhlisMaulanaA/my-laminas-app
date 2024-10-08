@@ -7,16 +7,18 @@ namespace HelloWorld\Controller;
 use Exception;
 use HelloWorld\Model\User;
 use HelloWorld\Form\UserForm;
-use HelloWorld\Model\UserTable;
+use HelloWorld\Form\LoginForm;
 
+use HelloWorld\Model\UserTable;
+use Laminas\Db\Adapter\Adapter;
 use HelloWorld\Form\ContactForm;
 use Laminas\View\Model\ViewModel;
-use HelloWorld\Service\GreetingService;
-use Laminas\Mvc\Controller\AbstractActionController;
 
-use HelloWorld\Form\LoginForm;
+use HelloWorld\Service\GreetingService;
 use Laminas\Authentication\AuthenticationService;
+use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\Authentication\Adapter\DbTable\CredentialTreatmentAdapter;
+
 
 class IndexController extends AbstractActionController
 {
@@ -26,7 +28,7 @@ class IndexController extends AbstractActionController
 
   private $dbAdapter;
 
-  public function __construct(GreetingService $greetingService, UserTable $userTable, $dbAdapter)
+  public function __construct(GreetingService $greetingService, UserTable $userTable, Adapter $dbAdapter)
   {
     $this->greetingService = $greetingService;
     $this->userTable = $userTable;

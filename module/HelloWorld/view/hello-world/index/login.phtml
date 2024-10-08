@@ -1,0 +1,11 @@
+<h1>Login</h1>
+
+<?php if (isset($this->error)): ?>
+    <p style="color: red;"><?= $this->error; ?></p>
+<?php endif; ?>
+
+<?= $this->form()->openTag($form); ?>
+    <?= $this->formRow($form->get('username')); ?>
+    <?= $this->formRow($form->get('password')); ?>
+    <?= $this->formSubmit($form->get('submit')); ?>
+<?= $this->form()->closeTag(); ?>

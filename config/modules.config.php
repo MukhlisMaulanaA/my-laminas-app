@@ -13,6 +13,7 @@ return [
     'Laminas\InputFilter',
     'Laminas\Router',
     'Laminas\Validator',
+    // 'Laminas\Authentication',
     'Application',
     'HelloWorld',
 ];

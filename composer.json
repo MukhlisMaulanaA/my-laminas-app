@@ -33,7 +33,8 @@
     "autoload": {
         "psr-4": {
             "Application\\": "module/Application/src/",
-            "HelloWorld\\": "module/HelloWorld/src/"
+            "HelloWorld\\": "module/HelloWorld/src/",
+            "Laminas\\Authentication\\": "vendor/laminas/laminas-authentication/src/"
         }
     },
     "autoload-dev": {
