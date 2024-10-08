@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace HelloWorld\Controller;
 
+use Exception;
 use HelloWorld\Model\User;
 use HelloWorld\Form\UserForm;
 use HelloWorld\Model\UserTable;
-use HelloWorld\Form\ContactForm;
 
+use HelloWorld\Form\ContactForm;
 use Laminas\View\Model\ViewModel;
 use HelloWorld\Service\GreetingService;
 use Laminas\Mvc\Controller\AbstractActionController;
@@ -89,5 +90,40 @@ class IndexController extends AbstractActionController
 
     return ['form' => $form];
   }
+
+  public function editAction()
+  {
+    $id = (int) $this->params()->fromRoute('id', 0);
+
+    if (0 === $id) {
+      return $this->redirect()->toRoute('user-add');
+    }
+
+    try {
+      $user = $this->userTable->getUser($id);
+    } catch (Exception $e) {
+      return $this->redirect()->toRoute('user-list');
+    }
+
+    $form = new UserForm();
+    $form->bind($user);
+    $form->get('submit')->setAttribute('value', 'Update');
+
+    $request = $this->getRequest();
+    if ($request->isPost()) {
+      $form->setData($request->getPost());
+
+      if ($form->isValid()) {
+        $this->userTable->saveUser($user);
+        return $this->redirect()->toRoute('user-list');
+      }
+    }
+
+    return [
+      'id' => $id,
+      'form' => $form,
+    ];
+  }
+
 
 }

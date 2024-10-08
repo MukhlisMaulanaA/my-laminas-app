@@ -47,6 +47,7 @@ return [
           ],
         ],
       ],
+      // CRUD Route
       'user-list' => [
         'type' => Literal::class,
         'options' => [
@@ -64,6 +65,19 @@ return [
           'defaults' => [
             'controller' => Controller\IndexController::class,
             'action' => 'add',
+          ],
+        ],
+      ],
+      'user-edit' => [
+        'type' => 'Segment',
+        'options' => [
+          'route' => '/user/edit[/:id]',
+          'defaults' => [
+            'controller' => Controller\IndexController::class,
+            'action' => 'edit',
+          ],
+          'constraints' => [
+            'id' => '[0-9]+',
           ],
         ],
       ],
