@@ -14,16 +14,23 @@ use Laminas\View\Model\ViewModel;
 use HelloWorld\Service\GreetingService;
 use Laminas\Mvc\Controller\AbstractActionController;
 
+use HelloWorld\Form\LoginForm;
+use Laminas\Authentication\AuthenticationService;
+use Laminas\Authentication\Adapter\DbTable\CredentialTreatmentAdapter;
+
 class IndexController extends AbstractActionController
 {
   private $greetingService;
 
   private $userTable;
 
-  public function __construct(GreetingService $greetingService, UserTable $userTable)
+  private $dbAdapter;
+
+  public function __construct(GreetingService $greetingService, UserTable $userTable, $dbAdapter)
   {
     $this->greetingService = $greetingService;
     $this->userTable = $userTable;
+    $this->dbAdapter = $dbAdapter;
   }
   public function indexAction()
   {
@@ -137,6 +144,50 @@ class IndexController extends AbstractActionController
     return $this->redirect()->toRoute('user-list');
   }
 
+  public function loginAction()
+  {
+    $form = new LoginForm();
+    $request = $this->getRequest();
 
+    if ($request->isPost()) {
+      $form->setData($request->getPost());
+
+      if ($form->isValid()) {
+        $data = $form->getData();
+
+        // Setup authentication adapter
+        $authAdapter = new CredentialTreatmentAdapter(
+          $this->dbAdapter,
+          'users',
+          'username',
+          'password',
+          'SHA1(?)'
+        );
+
+        // set kredensial yang diberikan pengguna
+        $authAdapter->setIdentity($data['username']);
+        $authAdapter->setIdentity($data['password']);
+
+        // cek kredensial dengan authentication service
+        $authService = new AuthenticationService();
+        $result = $authService->authenticate($authAdapter);
+
+        if ($result->isValid()) {
+          // autentikasi berhasil, simpan identitas pengguna
+          $authService->getStorage()->write($authAdapter->getResultRowObject());
+          return $this->redirect()->toRoute('user-list');
+        } else {
+          return new ViewModel([
+            'form' => $form,
+            'error' => 'Invalid Credential Provided.',
+          ]);
+        }
+      }
+    }
+
+    return new ViewModel(['form' => $form]);
+  }
+
+  
 
 }
