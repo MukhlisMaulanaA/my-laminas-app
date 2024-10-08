@@ -81,6 +81,20 @@ return [
           ],
         ],
       ],
+      'user-delete' => [
+        'type' => 'Segment',
+        'options' => [
+          'route' => '/user/delete[/:id]',
+          'defaults' => [
+            'controller' => Controller\IndexController::class,
+            'action' => 'delete',
+          ],
+          'constraints' => [
+            'id' => '[0-9]+',
+          ],
+        ],
+      ],
+      // end route CRUD
     ],
   ],
   'service_manager' => [
