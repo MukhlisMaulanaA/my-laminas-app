@@ -97,6 +97,29 @@ return [
         ],
       ],
       // end route CRUD
+
+      // login route
+      'login' => [
+        'type' => 'Literal',
+        'options' => [
+          'route' => '/login',
+          'defaults' => [
+            'controller' => Controller\IndexController::class,
+            'action' => 'login',
+          ],
+        ],
+      ],
+      // logout route
+      'logout' => [
+        'type' => 'Literal',
+        'options' => [
+          'route' => '/logout',
+          'defaults' => [
+            'controller' => Controller\IndexController::class,
+            'action' => 'logout',
+          ],
+        ],
+      ],
     ],
   ],
   'service_manager' => [
