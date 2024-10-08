@@ -188,6 +188,12 @@ class IndexController extends AbstractActionController
     return new ViewModel(['form' => $form]);
   }
 
-  
+  public function logoutAction()
+  {
+    // logout pengguna
+    $authService = new AuthenticationService();
+    $authService->clearIdentity();
+    return $this->redirect()->toRoute('login');
+  }
 
 }

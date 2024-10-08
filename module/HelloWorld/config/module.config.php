@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace HelloWorld;
 
 
+use HelloWorld\Model\UserTable;
 use Laminas\Router\Http\Literal;
 use Laminas\Router\Http\Segment;
 use Laminas\Db\ResultSet\ResultSet;
+use HelloWorld\Service\GreetingService;
 use Laminas\Db\TableGateway\TableGateway;
 use Laminas\ServiceManager\Factory\InvokableFactory;
 
@@ -119,8 +121,8 @@ return [
     'factories' => [
       Controller\IndexController::class => function ($container) {
         return new Controller\IndexController(
-          greetingService: $container->get(Service\GreetingService::class),
-          userTable: $container->get(Model\UserTable::class)
+          $container->get(GreetingService::class),
+          $container->get(UserTable::class)
         );
       },
     ],
