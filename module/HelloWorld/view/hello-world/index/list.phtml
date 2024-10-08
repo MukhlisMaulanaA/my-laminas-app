@@ -1,0 +1,7 @@
+<h1>User List</h1>
+
+<ul>
+    <?php foreach ($this->users as $user): ?>
+        <li><?= $this->escapeHtml($user->name); ?> (<?= $this->escapeHtml($user->email); ?>)</li>
+    <?php endforeach; ?>
+</ul>

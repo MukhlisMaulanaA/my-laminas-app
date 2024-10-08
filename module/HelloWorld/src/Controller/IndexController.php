@@ -7,6 +7,7 @@ namespace HelloWorld\Controller;
 use HelloWorld\Service\GreetingService;
 use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\ViewModel;
+use HelloWorld\Model\UserTable;
 
 use HelloWorld\Form\ContactForm;
 
@@ -14,11 +15,13 @@ class IndexController extends AbstractActionController
 {
   private $greetingService;
 
-  public function __construct(GreetingService $greetingService)
+  private $userTable;
+
+  public function __construct(GreetingService $greetingService, UserTable $userTable)
   {
     $this->greetingService = $greetingService;
+    $this->userTable = $userTable;  
   }
-
   public function indexAction()
   {
     return new ViewModel();
@@ -55,5 +58,12 @@ class IndexController extends AbstractActionController
     }
 
     return new ViewModel(['form' => $form]);
+  }
+
+  public function listAction()
+  {
+    return new ViewModel([
+      'users' => $this->userTable->fetchAll(),
+    ]);
   }
 }
