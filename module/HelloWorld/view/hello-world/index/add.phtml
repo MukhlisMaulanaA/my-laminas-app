@@ -1,0 +1,9 @@
+<h1>Add User</h1>
+
+<?= $this->form()->openTag($form); ?>
+  <?= $this->formRow($form->get('name')); ?>
+  <?= $this->formRow($form->get('email')); ?>
+  <?= $this->formSubmit($form->get('submit')); ?>
+<?= $this->form()->closeTag(); ?>
+
+<p><a href="<?= $this->url('user-list') ?>">Back to list</a></p>

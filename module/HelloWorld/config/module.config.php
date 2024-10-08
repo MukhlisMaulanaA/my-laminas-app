@@ -57,6 +57,16 @@ return [
           ],
         ],
       ],
+      'user-add' => [
+        'type' => Literal::class,
+        'options' => [
+          'route' => '/user/add',
+          'defaults' => [
+            'controller' => Controller\IndexController::class,
+            'action' => 'add',
+          ],
+        ],
+      ],
     ],
   ],
   'service_manager' => [

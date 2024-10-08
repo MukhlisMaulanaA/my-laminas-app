@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace HelloWorld\Controller;
 
+use HelloWorld\Model\User;
+use HelloWorld\Form\UserForm;
+use HelloWorld\Model\UserTable;
+use HelloWorld\Form\ContactForm;
+
+use Laminas\View\Model\ViewModel;
 use HelloWorld\Service\GreetingService;
 use Laminas\Mvc\Controller\AbstractActionController;
-use Laminas\View\Model\ViewModel;
-use HelloWorld\Model\UserTable;
-
-use HelloWorld\Form\ContactForm;
 
 class IndexController extends AbstractActionController
 {
@@ -20,7 +22,7 @@ class IndexController extends AbstractActionController
   public function __construct(GreetingService $greetingService, UserTable $userTable)
   {
     $this->greetingService = $greetingService;
-    $this->userTable = $userTable;  
+    $this->userTable = $userTable;
   }
   public function indexAction()
   {
@@ -66,4 +68,26 @@ class IndexController extends AbstractActionController
       'users' => $this->userTable->fetchAll(),
     ]);
   }
+
+  public function addAction()
+  {
+    $form = new UserForm();
+    $form->get('submit')->setValue('Add');
+
+    $request = $this->getRequest();
+
+    if ($request->isPost()) {
+      $user = new User();
+      $form->setData($request->getPost());
+
+      if ($form->isValid()) {
+        $user->exchangeArray($form->getData());
+        $this->userTable->saveUser($user);
+        return $this->redirect()->toRoute('user-list');
+      }
+    }
+
+    return ['form' => $form];
+  }
+
 }
