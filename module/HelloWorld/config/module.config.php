@@ -63,10 +63,12 @@ return [
     'factories' => [
       Service\GreetingService::class => InvokableFactory::class,
       Model\UserTable::class => function ($container) {
-        $tableGateway = $container->get(Model\UserTableGateway::class);
+        // Mengambil TableGateway yang kita definisikan
+        $tableGateway = $container->get('UserTableGateway');
         return new Model\UserTable($tableGateway);
       },
-      Model\UserTableGateway::class => function ($container) {
+      'UserTableGateway' => function ($container) {
+        // Membuat TableGateway untuk tabel 'users'
         $dbAdapter = $container->get('Laminas\Db\Adapter\Adapter');
         $resultSetPrototype = new ResultSet();
         $resultSetPrototype->setArrayObjectPrototype(new Model\User());
@@ -74,14 +76,14 @@ return [
       },
     ],
   ],
+
   'controllers' => [
     'factories' => [
-      Controller\IndexController::class => InvokableFactory::class,
       Controller\IndexController::class => function ($container) {
-        return new Controller\IndexController($container->get(Service\GreetingService::class));
-      },
-      Controller\IndexController::class => function ($container) {
-        return new Controller\IndexController($container->get(Model\UserTable::class));
+        return new Controller\IndexController(
+          greetingService: $container->get(Service\GreetingService::class),
+          userTable: $container->get(Model\UserTable::class)
+        );
       },
     ],
   ],
