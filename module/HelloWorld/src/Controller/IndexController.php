@@ -168,7 +168,7 @@ class IndexController extends AbstractActionController
 
         // set kredensial yang diberikan pengguna
         $authAdapter->setIdentity($data['username']);
-        $authAdapter->setIdentity($data['password']);
+        $authAdapter->setCredential($data['password']);
 
         // cek kredensial dengan authentication service
         $authService = new AuthenticationService();

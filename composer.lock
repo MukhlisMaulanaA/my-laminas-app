@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "71856b4e4a3880b3b153279c805f0a14",
+    "content-hash": "d37c58b5653e1ec4749b69d3a0c985ce",
     "packages": [
         {
             "name": "brick/varexporter",
@@ -1435,6 +1435,88 @@
                 }
             ],
             "time": "2023-10-24T11:19:47+00:00"
+        },
+        {
+            "name": "laminas/laminas-session",
+            "version": "2.21.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laminas/laminas-session.git",
+                "reference": "b8cd890f7682a255b335c2ca45df9a7cbc58873d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laminas/laminas-session/zipball/b8cd890f7682a255b335c2ca45df9a7cbc58873d",
+                "reference": "b8cd890f7682a255b335c2ca45df9a7cbc58873d",
+                "shasum": ""
+            },
+            "require": {
+                "laminas/laminas-eventmanager": "^3.12",
+                "laminas/laminas-servicemanager": "^3.22",
+                "laminas/laminas-stdlib": "^3.18",
+                "php": "~8.1.0 || ~8.2.0 || ~8.3.0"
+            },
+            "conflict": {
+                "zendframework/zend-session": "*"
+            },
+            "require-dev": {
+                "ext-xdebug": "*",
+                "laminas/laminas-cache": "^3.12.2",
+                "laminas/laminas-cache-storage-adapter-memory": "^2.3",
+                "laminas/laminas-coding-standard": "~2.5.0",
+                "laminas/laminas-db": "^2.20.0",
+                "laminas/laminas-http": "^2.19",
+                "laminas/laminas-validator": "^2.57.0",
+                "mongodb/mongodb": "~1.17.1",
+                "phpunit/phpunit": "^9.6.19",
+                "psalm/plugin-phpunit": "^0.19.0",
+                "vimeo/psalm": "^5.24.0"
+            },
+            "suggest": {
+                "laminas/laminas-cache": "Laminas\\Cache component",
+                "laminas/laminas-db": "Laminas\\Db component",
+                "laminas/laminas-http": "Laminas\\Http component",
+                "laminas/laminas-servicemanager": "Laminas\\ServiceManager component",
+                "laminas/laminas-validator": "Laminas\\Validator component",
+                "mongodb/mongodb": "If you want to use the MongoDB session save handler"
+            },
+            "type": "library",
+            "extra": {
+                "laminas": {
+                    "component": "Laminas\\Session",
+                    "config-provider": "Laminas\\Session\\ConfigProvider"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Laminas\\Session\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Object-oriented interface to PHP sessions and storage",
+            "homepage": "https://laminas.dev",
+            "keywords": [
+                "laminas",
+                "session"
+            ],
+            "support": {
+                "chat": "https://laminas.dev/chat",
+                "docs": "https://docs.laminas.dev/laminas-session/",
+                "forum": "https://discourse.laminas.dev",
+                "issues": "https://github.com/laminas/laminas-session/issues",
+                "rss": "https://github.com/laminas/laminas-session/releases.atom",
+                "source": "https://github.com/laminas/laminas-session"
+            },
+            "funding": [
+                {
+                    "url": "https://funding.communitybridge.org/projects/laminas-project",
+                    "type": "community_bridge"
+                }
+            ],
+            "time": "2024-06-19T14:36:45+00:00"
         },
         {
             "name": "laminas/laminas-skeleton-installer",
