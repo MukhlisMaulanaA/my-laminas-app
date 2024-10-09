@@ -99,7 +99,7 @@ return [
 
       // login route
       'login' => [
-        'type' => 'Literal',
+        'type' => Literal::class,
         'options' => [
           'route' => '/login',
           'defaults' => [
@@ -110,12 +110,35 @@ return [
       ],
       // logout route
       'logout' => [
-        'type' => 'Literal',
+        'type' => Literal::class,
         'options' => [
           'route' => '/logout',
           'defaults' => [
             'controller' => Controller\IndexController::class,
             'action' => 'logout',
+          ],
+        ],
+      ],
+
+      // route admin
+      'admin' => [
+        'type' => Literal::class,
+        'options' => [
+          'route' => '/admin',
+          'defaults' => [
+            'controller' => Controller\AdminController::class,
+            'action' => 'admin',
+          ],
+        ],
+      ],
+      // route user
+      'profile' => [
+        'type' => Literal::class,
+        'options' => [
+          'route' => '/profile',
+          'defaults' => [
+            'controller' => Controller\UserController::class,
+            'action' => 'profile',
           ],
         ],
       ],
@@ -146,6 +169,7 @@ return [
 
   'controllers' => [
     'factories' => [
+      Controller\AdminController::class => InvokableFactory::class,
       Controller\IndexController::class => function ($container) {
         return new Controller\IndexController(
           $container->get(Service\GreetingService::class),  // Argument 1: GreetingService
@@ -153,6 +177,7 @@ return [
           $container->get('Laminas\Db\Adapter\Adapter')     // Argument 3: DbAdapter
         );
       },
+      Controller\UserController::class => InvokableFactory::class,
     ],
   ],
   'view_manager' => [

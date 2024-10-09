@@ -160,28 +160,38 @@ class IndexController extends AbstractActionController
         // Setup authentication adapter
         $authAdapter = new CredentialTreatmentAdapter(
           $this->dbAdapter,
-          'users',
-          'username',
-          'password',
-          'SHA1(?)'
+          'users',               // Nama tabel
+          'username',            // Kolom username
+          'password',            // Kolom password
+          'SHA1(?)'              // Format hash (sesuaikan metode hash)
         );
 
-        // set kredensial yang diberikan pengguna
+        // Set identitas (username) dan credential (password)
         $authAdapter->setIdentity($data['username']);
         $authAdapter->setCredential($data['password']);
 
-        // cek kredensial dengan authentication service
+        // Jalankan autentikasi
         $authService = new AuthenticationService();
         $result = $authService->authenticate($authAdapter);
 
         if ($result->isValid()) {
-          // autentikasi berhasil, simpan identitas pengguna
-          $authService->getStorage()->write($authAdapter->getResultRowObject());
-          return $this->redirect()->toRoute('user-list');
+          // Autentikasi berhasil
+          $identity = $authAdapter->getResultRowObject();
+          $authService->getStorage()->write($identity);
+
+          // Redirect pengguna berdasarkan peran
+          if ($identity->role === 'admin') {
+            return $this->redirect()->toRoute('admin');
+          } elseif ($identity->role === 'user') {
+            return $this->redirect()->toRoute('profile');  // Misalnya halaman profil user
+          } else {
+            return $this->redirect()->toRoute('login');
+          }
         } else {
+          // Autentikasi gagal
           return new ViewModel([
             'form' => $form,
-            'error' => 'Invalid Credential Provided.',
+            'error' => 'Invalid credentials provided',
           ]);
         }
       }
