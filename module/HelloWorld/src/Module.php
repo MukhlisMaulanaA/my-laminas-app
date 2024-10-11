@@ -27,6 +27,10 @@ class Module
 
   public function checkAuthorization(MvcEvent $e)
   {
+    // Tambahkan logging atau var_dump untuk debugging
+    error_log("checkAuthorization called");  // Ini akan masuk ke log PHP
+    var_dump('checkAuthorization called0');   // Ini akan tampil di output HTML
+
     $route = $e->getRouteMatch()->getMatchedRouteName();
     $authService = new AuthenticationService();
     $rbac = $this->getRbac();
@@ -43,6 +47,7 @@ class Module
     // Batasi akses ke route /admin (hanya admin yang bisa mengakses)
     if ($route === 'admin') {
       if (!$rbac->isGranted($role, 'manage-users')) {
+        var_dump("Access denied to admin page for role: $role");
         // Jika pengguna tidak memiliki izin, arahkan ke halaman login
         return $e->getTarget()->redirect()->toRoute('login');
       }
@@ -74,6 +79,11 @@ class Module
     $admin->addPermission('view-profile');
     $admin->addPermission('manage-users'); // Hanya admin yang bisa mengelola user
     $rbac->addRole($admin, 'user'); // Admin mewarisi izin dari user
+
+    // Debug untuk memverifikasi RBAC berfungsi
+    var_dump($rbac->isGranted('admin', 'manage-users'));  // Harus true
+    var_dump($rbac->isGranted('user', 'manage-users'));   // Harus false
+
 
     return $rbac;
   }

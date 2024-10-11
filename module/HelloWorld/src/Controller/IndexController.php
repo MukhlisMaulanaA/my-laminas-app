@@ -148,57 +148,76 @@ class IndexController extends AbstractActionController
 
   public function loginAction()
   {
+    // Inisialisasi form login
     $form = new LoginForm();
     $request = $this->getRequest();
 
+    // Proses form ketika ada request POST (ketika user meng-submit form login)
     if ($request->isPost()) {
       $form->setData($request->getPost());
 
+      // Validasi form (cek apakah input pengguna valid)
       if ($form->isValid()) {
-        $data = $form->getData();
+        $data = $form->getData(); // Ambil data dari form
 
-        // Setup authentication adapter
+        // Setup adapter autentikasi
         $authAdapter = new CredentialTreatmentAdapter(
-          $this->dbAdapter,
+          $this->dbAdapter,      // Database adapter
           'users',               // Nama tabel
-          'username',            // Kolom username
-          'password',            // Kolom password
-          'SHA1(?)'              // Format hash (sesuaikan metode hash)
+          'username',            // Kolom untuk username
+          'password',            // Kolom untuk password
+          'SHA1(?)'              // Hashing password (sesuaikan dengan metode hash Anda)
         );
 
-        // Set identitas (username) dan credential (password)
+        // Set username dan password yang diinput oleh user
         $authAdapter->setIdentity($data['username']);
         $authAdapter->setCredential($data['password']);
 
-        // Jalankan autentikasi
+        // Inisialisasi AuthenticationService
         $authService = new AuthenticationService();
+
+        // Coba autentikasi
         $result = $authService->authenticate($authAdapter);
 
+        // Cek apakah autentikasi berhasil
         if ($result->isValid()) {
-          // Autentikasi berhasil
-          $identity = $authAdapter->getResultRowObject();
+          // Jika autentikasi berhasil, ambil data user dari database
+          $identity = $authAdapter->getResultRowObject(null, 'password'); // Ambil semua kolom kecuali password
+
+          // Simpan identitas user di session
           $authService->getStorage()->write($identity);
 
-          // Redirect pengguna berdasarkan peran
+          // Debugging: Lihat role yang disimpan
+          var_dump($identity->role);
+          var_dump("Logged in with role: " . $identity->role);
+
+          // Redirect pengguna berdasarkan peran/role
           if ($identity->role === 'admin') {
+            // Jika user adalah admin, redirect ke halaman admin
             return $this->redirect()->toRoute('admin');
           } elseif ($identity->role === 'user') {
-            return $this->redirect()->toRoute('profile');  // Misalnya halaman profil user
+            // Jika user adalah user biasa, redirect ke halaman profil
+            return $this->redirect()->toRoute('profile');
           } else {
+            // Jika role tidak dikenali, redirect kembali ke halaman login
             return $this->redirect()->toRoute('login');
           }
         } else {
-          // Autentikasi gagal
+          // Jika autentikasi gagal, tampilkan pesan error
           return new ViewModel([
             'form' => $form,
-            'error' => 'Invalid credentials provided',
+            'error' => 'Invalid credentials provided'
           ]);
         }
       }
     }
 
-    return new ViewModel(['form' => $form]);
+    // Render form login
+    return new ViewModel([
+      'form' => $form
+    ]);
   }
+
 
   public function logoutAction()
   {

@@ -170,6 +170,7 @@ return [
   'controllers' => [
     'factories' => [
       Controller\AdminController::class => InvokableFactory::class,
+      Controller\UserController::class => InvokableFactory::class,
       Controller\IndexController::class => function ($container) {
         return new Controller\IndexController(
           $container->get(Service\GreetingService::class),  // Argument 1: GreetingService
@@ -177,7 +178,6 @@ return [
           $container->get('Laminas\Db\Adapter\Adapter')     // Argument 3: DbAdapter
         );
       },
-      Controller\UserController::class => InvokableFactory::class,
     ],
   ],
   'view_manager' => [
