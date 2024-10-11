@@ -2,16 +2,34 @@
 
 namespace HelloWorld\Controller;
 
-use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\ViewModel;
+use Laminas\Authentication\AuthenticationService;
+use Laminas\Mvc\Controller\AbstractActionController;
 
 class UserController extends AbstractActionController
 {
+  private $authService;
+
+  public function __construct(AuthenticationService $authService)
+  {
+    $this->authService = $authService;
+  }
+
   public function profileAction()
   {
-    // Ini adalah halaman profil yang bisa diakses oleh user dan admin
+    // Cek apakah pengguna sudah login
+    if (!$this->authService->hasIdentity()) {
+      // Jika belum login, redirect ke halaman login
+      return $this->redirect()->toRoute('login');
+    }
+
+    // Ambil identitas pengguna dari session
+    $identity = $this->authService->getIdentity();
+
+    // Render halaman profil jika pengguna sudah login
     return new ViewModel([
-      'message' => 'Welcome to your profile page!'
+      'username' => $identity->getUsername(),
+      'role' => $identity->getRole(),
     ]);
   }
 }

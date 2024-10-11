@@ -21,6 +21,24 @@ class User
     $this->role = !empty($data['role']) ? $data['role'] : null;
   }
 
+  // Getter untuk password
+  public function getPassword()
+  {
+      return $this->password;
+  }
+
+  // Getter untuk username
+  public function getUsername()
+  {
+      return $this->username;
+  }
+
+  // Getter untuk role
+  public function getRole()
+  {
+      return $this->role;
+  }
+
   public function getArrayCopy()
   {
     return [

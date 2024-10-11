@@ -62,4 +62,16 @@ class UserTable
   {
     $this->tableGateway->delete(['id' => (int) $id]);
   }
+
+  public function fetchByUsername($username)
+  {
+    $rowset = $this->tableGateway->select(['username' => $username]);
+    $user = $rowset->current();
+
+    if (!$user) {
+      throw new RuntimeException('User not found');
+    }
+
+    return $user;
+  }
 }

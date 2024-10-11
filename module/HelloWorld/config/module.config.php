@@ -4,12 +4,16 @@ declare(strict_types=1);
 
 namespace HelloWorld;
 
-
+use HelloWorld\Model\UserTable;
 use Laminas\Router\Http\Literal;
 use Laminas\Router\Http\Segment;
 use Laminas\Db\ResultSet\ResultSet;
 use Laminas\Db\TableGateway\TableGateway;
+use HelloWorld\Factory\AuthControllerFactory;
+use HelloWorld\Factory\UserControllerFactory;
+use HelloWorld\Factory\AdminControllerFactory;
 use Laminas\Authentication\AuthenticationService;
+use HelloWorld\Factory\AuthenticationServiceFactory;
 use Laminas\ServiceManager\Factory\InvokableFactory;
 
 return [
@@ -103,7 +107,7 @@ return [
         'options' => [
           'route' => '/login',
           'defaults' => [
-            'controller' => Controller\IndexController::class,
+            'controller' => Controller\AuthController::class,
             'action' => 'login',
           ],
         ],
@@ -114,7 +118,7 @@ return [
         'options' => [
           'route' => '/logout',
           'defaults' => [
-            'controller' => Controller\IndexController::class,
+            'controller' => Controller\AuthController::class,
             'action' => 'logout',
           ],
         ],
@@ -131,6 +135,7 @@ return [
           ],
         ],
       ],
+
       // route user
       'profile' => [
         'type' => Literal::class,
@@ -147,30 +152,38 @@ return [
   ],
   'service_manager' => [
     'factories' => [
+      AuthenticationService::class => AuthenticationServiceFactory::class,
       Service\GreetingService::class => InvokableFactory::class,
       Model\UserTable::class => function ($container) {
         // Mengambil TableGateway yang kita definisikan
         $tableGateway = $container->get('UserTableGateway');
         return new Model\UserTable($tableGateway);
       },
+      // Tambahkan konfigurasi untuk UserTable
+      'UserTable' => function ($container) {
+        $tableGateway = $container->get('UserTableGateway');
+        return new UserTable($tableGateway);
+      },
+
+      // Tambahkan konfigurasi untuk UserTableGateway
       'UserTableGateway' => function ($container) {
-        // Membuat TableGateway untuk tabel 'users'
         $dbAdapter = $container->get('Laminas\Db\Adapter\Adapter');
         $resultSetPrototype = new ResultSet();
         $resultSetPrototype->setArrayObjectPrototype(new Model\User());
         return new TableGateway('users', $dbAdapter, null, $resultSetPrototype);
       },
-      AuthenticationService::class => function ($container) {
-        $authService = new AuthenticationService();
-        return $authService;
-      },
+      // AuthenticationService::class => function ($container) {
+      //   $authService = new AuthenticationService();
+      //   return $authService;
+      // },
     ],
   ],
 
   'controllers' => [
     'factories' => [
-      Controller\AdminController::class => InvokableFactory::class,
-      Controller\UserController::class => InvokableFactory::class,
+      Controller\AuthController::class => AuthControllerFactory::class,
+      Controller\AdminController::class => AdminControllerFactory::class,
+      Controller\UserController::class => UserControllerFactory::class,
       Controller\IndexController::class => function ($container) {
         return new Controller\IndexController(
           $container->get(Service\GreetingService::class),  // Argument 1: GreetingService
