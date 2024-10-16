@@ -48,6 +48,8 @@ class AuthController extends AbstractActionController
 
         $user = new User();
         $user->exchangeArray([
+          'name' => $data['name'],
+          'email' => $data['email'],
           'username' => $data['username'],
           'password' => $hashedPassword,
           'role' => 'user',

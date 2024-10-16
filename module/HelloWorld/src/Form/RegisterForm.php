@@ -11,6 +11,24 @@ class RegisterForm extends Form implements InputFilterProviderInterface
   {
     parent::__construct('register');
 
+    // Name field
+    $this->add([
+      'name' => 'name',
+      'type' => 'Text',
+      'options' => [
+        'label' => 'Name',
+      ],
+    ]);
+
+    // Email field
+    $this->add([
+      'name' => 'email',
+      'type' => 'Email',
+      'options' => [
+        'label' => 'Email',
+      ],
+    ]);
+
     // Username field
     $this->add([
       'name' => 'username',
@@ -53,6 +71,32 @@ class RegisterForm extends Form implements InputFilterProviderInterface
   public function getInputFilterSpecification()
   {
     return [
+      'name' => [
+        'required' => true,
+        'filters' => [
+          ['name' => 'StringTrim'],
+          ['name' => 'StripTags'],
+        ],
+        'validators' => [
+          [
+            'name' => 'StringLength',
+            'options' => [
+              'min' => 2,
+              'max' => 255,
+            ],
+          ],
+        ],
+      ],
+
+      'email' => [
+        'required' => true,
+        'validators' => [
+          [
+            'name' => 'EmailAddress',
+          ],
+        ],
+      ],
+
       'username' => [
         'required' => true,
         'filters' => [
@@ -68,6 +112,7 @@ class RegisterForm extends Form implements InputFilterProviderInterface
           ],
         ],
       ],
+
       'password' => [
         'required' => true,
         'validators' => [
@@ -79,6 +124,7 @@ class RegisterForm extends Form implements InputFilterProviderInterface
           ],
         ],
       ],
+
       'confirm_password' => [
         'required' => true,
         'validators' => [
