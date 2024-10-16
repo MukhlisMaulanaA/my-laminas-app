@@ -92,7 +92,7 @@ class IndexController extends AbstractActionController
 
       if ($form->isValid()) {
         $user->exchangeArray($form->getData());
-        $this->userTable->saveUser($user);
+        $this->userTable->createUser($user);
         return $this->redirect()->toRoute('user-list');
       }
     }
@@ -123,7 +123,7 @@ class IndexController extends AbstractActionController
       $form->setData($request->getPost());
 
       if ($form->isValid()) {
-        $this->userTable->saveUser($user);
+        $this->userTable->createUser($user);
         return $this->redirect()->toRoute('user-list');
       }
     }

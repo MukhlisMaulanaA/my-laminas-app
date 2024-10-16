@@ -3,18 +3,65 @@
 namespace HelloWorld\Controller;
 
 use HelloWorld\Form\LoginForm;
+use HelloWorld\Form\RegisterForm;
+use HelloWorld\Model\User;
+use HelloWorld\Model\UserTable;
 use Laminas\View\Model\ViewModel;
 use Laminas\Authentication\AuthenticationService;
 use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\Crypt\Password\Bcrypt;
+
 
 class AuthController extends AbstractActionController
 {
   private $authService;
 
+  private $userTable;
+
   // Inject AuthenticationService via constructor
-  public function __construct(AuthenticationService $authService)
+  public function __construct(AuthenticationService $authService, UserTable $userTable)
   {
     $this->authService = $authService;
+    $this->userTable = $userTable;
+  }
+
+  public function registerAction()
+  {
+    $form = new RegisterForm();
+    $request = $this->getRequest();
+
+    if ($request->isPost()) {
+      $form->setData($request->getPost());
+
+      if ($form->isValid()) {
+        $data = $form->getData();
+
+        if ($this->userTable->fetchByUsername($data['username'])) {
+          return new ViewModel([
+            'form' => $form,
+            'error' => 'Username already exists.',
+          ]);
+        }
+        
+        $bcrypt = new Bcrypt();
+        $hashedPassword = $bcrypt->create($data['password']);
+
+        $user = new User();
+        $user->exchangeArray([
+          'username' => $data['username'],
+          'password' => $hashedPassword,
+          'role' => 'user',
+        ]);
+
+        $this->userTable->saveUser($user);
+
+        return $this->redirect()->toRoute('login');
+      }
+    }
+
+    return new ViewModel([
+      'form' => $form,
+    ]);
   }
 
   public function loginAction()

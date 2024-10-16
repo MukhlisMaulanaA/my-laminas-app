@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace HelloWorld;
 
+use HelloWorld\Controller\AuthController;
 use HelloWorld\Model\UserTable;
 use Laminas\Router\Http\Literal;
 use Laminas\Router\Http\Segment;
@@ -100,6 +101,18 @@ return [
         ],
       ],
       // end route CRUD
+
+      // register route
+      'register' => [
+        'type' => Literal::class,
+        'options' => [
+          'route' => '/register',
+          'defaults' => [
+            'controller' => AuthController::class,
+            'action' => 'register',
+          ],
+        ],
+      ],
 
       // login route
       'login' => [

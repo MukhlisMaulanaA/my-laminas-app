@@ -1,0 +1,12 @@
+<h1>Register</h1>
+
+<?php if (isset($error)): ?>
+    <p style="color: red;"><?= $this->escapeHtml($error); ?></p>
+<?php endif; ?>
+
+<?= $this->form()->openTag($form); ?>
+    <?= $this->formRow($form->get('username')); ?>
+    <?= $this->formRow($form->get('password')); ?>
+    <?= $this->formRow($form->get('confirm_password')); ?>
+    <?= $this->formSubmit($form->get('submit')); ?>
+<?= $this->form()->closeTag(); ?>

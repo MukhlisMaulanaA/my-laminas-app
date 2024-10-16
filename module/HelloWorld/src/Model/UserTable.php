@@ -34,7 +34,7 @@ class UserTable
     return $row;
   }
 
-  public function saveUser(User $user)
+  public function createUser(User $user)
   {
     $data = [
       'name' => $user->name,
@@ -73,5 +73,16 @@ class UserTable
     }
 
     return $user;
+  }
+
+  public function saveUser(User $user)
+  {
+    $data = $user->getArrayCopy();
+
+    if ($user->id) {
+      $this->tableGateway->update($data, ['id' => $user->id]);
+    } else {
+      $this->tableGateway->insert($data);
+    }
   }
 }
