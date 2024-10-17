@@ -2,6 +2,7 @@
 
 namespace HelloWorld\Form;
 
+use Laminas\Form\Element\Csrf;
 use Laminas\Form\Form;
 
 class LoginForm extends Form
@@ -9,6 +10,17 @@ class LoginForm extends Form
   public function __construct($name = null)
   {
     parent::__construct('login');
+
+    // CSRF Token
+    $this->add([
+      'type' => Csrf::class,
+      'name' => 'csrf',
+      'options' => [
+        'csrf_options' => [
+          'timeout' => 600,
+        ],
+      ],
+    ]);
 
     $this->add([
       'name' => 'username',

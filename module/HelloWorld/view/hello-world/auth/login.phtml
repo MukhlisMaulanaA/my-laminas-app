@@ -5,7 +5,8 @@
 <?php endif; ?>
 
 <?= $this->form()->openTag($form); ?>
-    <?= $this->formRow($form->get('username')); ?>
-    <?= $this->formRow($form->get('password')); ?>
-    <?= $this->formSubmit($form->get('submit')); ?>
+  <?= $this->formRow($form->get('csrf')); ?>
+  <?= $this->formRow($form->get('username')); ?>
+  <?= $this->formRow($form->get('password')); ?>
+  <?= $this->formSubmit($form->get('submit')); ?>
 <?= $this->form()->closeTag(); ?>

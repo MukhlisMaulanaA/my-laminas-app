@@ -27,6 +27,12 @@ class AuthController extends AbstractActionController
 
   public function registerAction()
   {
+    // Cek apakah pengguna sudah login
+    if ($this->authService->hasIdentity()) {
+      // Jika sudah login, redirect ke halaman profil atau dashboard
+      return $this->redirect()->toRoute('profile');
+    }
+
     $form = new RegisterForm();
     $request = $this->getRequest();
 
