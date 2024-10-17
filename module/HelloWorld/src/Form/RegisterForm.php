@@ -2,6 +2,7 @@
 // module/HelloWorld/src/Form/RegisterForm.php
 namespace HelloWorld\Form;
 
+use Laminas\Form\Element\Csrf;
 use Laminas\Form\Form;
 use Laminas\InputFilter\InputFilterProviderInterface;
 
@@ -10,6 +11,17 @@ class RegisterForm extends Form implements InputFilterProviderInterface
   public function __construct($name = null)
   {
     parent::__construct('register');
+
+    // CSRF Token
+    $this->add([
+      'type' => Csrf::class,
+      'name' => 'csrf',
+      'options' => [
+        'csrf_options' => [
+          'timeout' => 600, // 10 minutes
+        ],
+      ],
+    ]);
 
     // Name field
     $this->add([

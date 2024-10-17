@@ -43,8 +43,8 @@ class AuthController extends AbstractActionController
           ]);
         }
         
-        $bcrypt = new Bcrypt();
-        $hashedPassword = $bcrypt->create($data['password']);
+        $bcrypt = new Bcrypt(); // inisiasi package Bcrypt
+        $hashedPassword = $bcrypt->create($data['password']); // encryption password using bcrypt algorithm
 
         $user = new User();
         $user->exchangeArray([
