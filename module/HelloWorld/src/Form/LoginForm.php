@@ -28,6 +28,10 @@ class LoginForm extends Form
       'options' => [
         'label' => 'Username',
       ],
+      'attributes' => [
+        'class' => 'form-control', // Tambahkan class Bootstrap
+        'placeholder' => 'Enter your username', // Tambahkan placeholder
+      ],
     ]);
 
     $this->add([
@@ -35,6 +39,10 @@ class LoginForm extends Form
       'type' => 'Password',
       'options' => [
         'label' => 'Password',
+      ],
+      'attributes' => [
+        'class' => 'form-control',
+        'placeholder' => 'Enter your password',
       ],
     ]);
 
@@ -44,6 +52,7 @@ class LoginForm extends Form
       'attributes' => [
         'value' => 'Login',
         'id' => 'submitbutton',
+        'class' => 'btn btn-primary'
       ],
     ]);
   }
