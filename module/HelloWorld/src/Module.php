@@ -19,5 +19,4 @@ class Module
     return $config;
   }
 
-
 }

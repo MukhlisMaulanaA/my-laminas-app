@@ -2,14 +2,16 @@
 
 namespace HelloWorld\Controller;
 
-use HelloWorld\Form\LoginForm;
-use HelloWorld\Form\RegisterForm;
+use Laminas\Form\Form;
 use HelloWorld\Model\User;
+use HelloWorld\Form\LoginForm;
+use Laminas\Form\Element\Csrf;
 use HelloWorld\Model\UserTable;
+use HelloWorld\Form\RegisterForm;
 use Laminas\View\Model\ViewModel;
+use Laminas\Crypt\Password\Bcrypt;
 use Laminas\Authentication\AuthenticationService;
 use Laminas\Mvc\Controller\AbstractActionController;
-use Laminas\Crypt\Password\Bcrypt;
 
 
 class AuthController extends AbstractActionController
@@ -48,7 +50,7 @@ class AuthController extends AbstractActionController
             'error' => 'Username already exists.',
           ]);
         }
-        
+
         $bcrypt = new Bcrypt(); // inisiasi package Bcrypt
         $hashedPassword = $bcrypt->create($data['password']); // encryption password using bcrypt algorithm
 
@@ -119,12 +121,32 @@ class AuthController extends AbstractActionController
     return new ViewModel(['form' => $form]);
   }
 
+  public function getLogoutForm()
+  {
+    $logoutForm = new Form();
+    $logoutForm->add([
+      'type' => Csrf::class,
+      'name' => 'csrf',
+      'options' => [
+        'csrf_options' => [
+          'timeout' => 600, // Masa berlaku token CSRF, misalnya 10 menit
+        ],
+      ],
+    ]);
+    return $logoutForm;
+  }
+
   public function logoutAction()
   {
-    // Hapus session user saat logout
-    $this->authService->clearIdentity();
+    $viewModel = new ViewModel();
+    if ($this->authService->hasIdentity()) {
+      $logoutForm = $this->getLogoutForm();
+      $viewModel->setVariable('logoutForm', $logoutForm); // Kirim form ke layout
+    }
 
-    // Redirect ke halaman login
-    return $this->redirect()->toRoute('login');
+    // Enable layout and pass data
+    $this->layout()->setVariable('logoutForm', $logoutForm); // Pass to layout
+
+    return $viewModel;
   }
 }
